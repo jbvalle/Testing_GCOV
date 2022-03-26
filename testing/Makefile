@@ -21,6 +21,7 @@ TARGET:=main_testing
 
 all: $(TARGET) $(OBJ_CXX) $(OBJ_C)
 
+#Create test main File from all srcs files except main from program
 $(TARGET): $(SRCS_C) $(SRCS_CXX)
 	$(CC) -o $@ $^ $(CFLAGS) $(TESTFLAGS)
 

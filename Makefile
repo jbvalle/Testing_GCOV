@@ -2,13 +2,17 @@
 
 CC=gcc
 
-GCOV=gcov
+COV=gcov
+
+COVR=gcovr
 
 TESTPATH=testing/
 
 CFLAGS=-Wall -Wextra -pedantic -g
 
 COVFLAGS=-ftest-coverage -fprofile-arcs
+
+CVRFLAGS=-r . --html --html-details
 
 TARGET:=main
 
@@ -18,9 +22,11 @@ OBJ=$(SRCS:%.c=%.o)
 
 BINS=$(TARGET) $(OBJ)
 
+#Generate single object file for each c file
 %.o: %.c
 	$(CC) -c -o $@ $^ $(CFLAGS)
 
+#Create Main Target from all object files
 $(TARGET): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(COVFLAGS)
 
@@ -29,10 +35,14 @@ test:
 	$(MAKE) -C $(TESTPATH) run
 
 cov:
-	@$(GCOV) $(TARGET)
+	@$(COV) $(TARGET)
 
 run:
 	./$(TARGET)
+
+report:
+	$(COVR) $(CVRFLAGS) -o covr.html
+	firefox covr.html
 
 clean:
 	rm -rf $(BINS) $(OBJ)
